@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - [ master ]
 
 jobs:
   build:
@@ -13,9 +13,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: To Show Error
-        run: echo "Should fail at this point ...." ; exit 1
-
       - name: Run a one-line script
-        run: echo "Continuous Integration"
+        run: echo "Continuous Integration" 
