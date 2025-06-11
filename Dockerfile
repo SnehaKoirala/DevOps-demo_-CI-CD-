@@ -20,3 +20,4 @@ ENTRYPOINT ["java", "-jar", "/devops-demo-1.0.jar"]
 #   EXPOSE 8080 
 #   COPY --from=build /app/target/*jar devops-demo-1.0.jar
 #   ENTRYPOINT ["java","-jar","devops-demo-1.0.jar"]
+ 

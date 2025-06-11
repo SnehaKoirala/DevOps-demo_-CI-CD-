@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doc-k8s-example
+  labels:
+    app: doc-k8s-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: doc-k8s-example
+  template:
+    metadata:
+      labels:
+        app: doc-k8s-example
+    spec:
+      containers:
+        - name: doc-k8s-example
+          image: doc-k8s-example:v2.11.3
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: doc-k8s-example
+  labels:
+    app: doc-k8s-example
+spec:
+  selector:
+    app: doc-k8s-example
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort

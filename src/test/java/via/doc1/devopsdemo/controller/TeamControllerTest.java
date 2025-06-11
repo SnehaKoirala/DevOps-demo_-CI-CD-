@@ -29,14 +29,14 @@ public class TeamControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockBean 
     private TeamService teamService;
 
     Task mockTask = new Task("Task1", "IoT Pipeline", "Create CD pipeline for IoT component");
     String jsonTask = "{\"name\":\"IoT Pipeline\",\"description\":\"Create CD pipeline for IoT service\"}";
 
     @Test
-    
+
     public void getTaskDetailsTest() throws Exception {
         Mockito.when(teamService.getTask(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(mockTask);
