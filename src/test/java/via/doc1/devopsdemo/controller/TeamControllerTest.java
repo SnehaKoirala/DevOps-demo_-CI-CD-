@@ -24,6 +24,7 @@ import via.doc1.devopsdemo.service.TeamService;
 @WebMvcTest(value = TeamController.class)
 public class TeamControllerTest {
 
+
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private MockMvc mockMvc;
@@ -35,6 +36,7 @@ public class TeamControllerTest {
     String jsonTask = "{\"name\":\"IoT Pipeline\",\"description\":\"Create CD pipeline for IoT service\"}";
 
     @Test
+    
     public void getTaskDetailsTest() throws Exception {
         Mockito.when(teamService.getTask(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(mockTask);
