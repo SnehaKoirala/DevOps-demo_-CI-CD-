@@ -1,48 +1,49 @@
-name: CD - Deploy to Minikube using GitHub Actions
+name: CD - Deploy to Minikube using Github Actions
 
 on:
+  # Trigger the workflow on push from the master/main branch or on pull request
   push:
-    branches: 
-      - main
+    branches: [ main ]
   pull_request:
-    branches: 
-      - main
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  # Build job
+  job1:
     name: Build and Deploy to Minikube
+    # Run on Ubuntu using the latest version
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        name: Checkout Code
 
-      - name: Start Minikube
-        id: minikube
+      - id: minikube
         uses: medyagh/setup-minikube@latest
+        name: Start Minikube
 
-      - name: Check Minikube Cluster
+      - name: Try the cluster!
         run: kubectl get pods -A
 
-      - name: Build Docker Image
+      - name: Build Image
         run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
-          docker build -f ./Dockerfile -t doc-k8s-example:v2.11.3 .
+          docker build -f ./Dockerfile -t local/cicd-example .
+          echo -n "Verifying images: "
           docker images
 
-      - name: Deploy to Kubernetes
+      - name: Deploy to Minikube
         run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
-          kubectl wait --for=condition=Ready pod -l app=doc-k8s-example --timeout=120s
+          kubectl apply -f deploy.yaml
+          kubectl wait --for=condition=Ready pod -l app=cicd-example
           kubectl get all
 
-      - name: Test Service
+      - name: Test service URLs
         run: |
-          echo "SERVICE_URL=$(minikube service doc-k8s-example --url)"
-          kubectl port-forward service/doc-k8s-example 8080:8080 &> /dev/null &
+          echo "SERVICE_URL=$(minikube service cicd-example --url)"
+          kubectl port-forward service/cicd-example 8080:8080 &> /dev/null &
           sleep 5
+          kubectl port-forward service/cicd-example 8080:8080 &> /dev/null &
           curl -i http://localhost:8080/
 
       - name: Cleanup
